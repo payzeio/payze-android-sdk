@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">PayApp</string>
+    <string name="card_number">card_number</string>
+    <string name="card_holder">card_holder</string>
+    <string name="card_cvv">card_cvv</string>
+    <string name="card_exp">card_exp</string>
+    <string name="pay">pay</string>
+    <string name="success_msg">Successfully Done</string>
+    <string name="error_msg">Failure: code:%d, Error: %s</string>
+</resources>

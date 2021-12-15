@@ -1,0 +1,3 @@
+<resources>
+    <string name="reject_auth">rejected 2FA auth</string>
+</resources>
