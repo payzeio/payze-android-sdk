@@ -1,3 +1,4 @@
 <resources>
     <string name="reject_auth">rejected 2FA auth</string>
+    <string name="unknown_error">something went wrong!</string>
 </resources>

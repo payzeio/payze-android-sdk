@@ -1,6 +1,7 @@
 package com.payze.paylib
 
 import android.content.Context
+import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import com.payze.paylib.model.CardInfo
 import com.payze.paylib.network.ApiService
@@ -12,6 +13,7 @@ class Payze(private val context: Context) {
     private var transactionID: String? = null
     private var onSuccess: (() -> Unit)? = null
     private var onError: ((code: Int?, error: String?) -> Unit)? = null
+    private val activity get() = context as AppCompatActivity
 
     init {
         ApiService.initialize()
@@ -66,7 +68,7 @@ class Payze(private val context: Context) {
                         it.success == true && it.threeDSIsPresent != true ->
                             checkTransactionStatus(transactionID)
                         else ->
-                            handleError()
+                            handleError(KEY_UNKNOWN, context.getString(R.string.unknown_error))
                     }
                 }
             },
@@ -115,25 +117,33 @@ class Payze(private val context: Context) {
     }
 
     private fun openWebView(url: String) {
+        savedScreenOrientation = activity.requestedOrientation
+        activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED
         val dialog = WebViewDialog.instance(url)
         WebViewDialog.listener = object : WebViewDialog.DialogCallBack {
             override fun onDismiss(success: Boolean) {
+                savedScreenOrientation?.let {
+                    activity.requestedOrientation = it
+                }
                 if (success)
                     checkTransactionStatus(transactionID)
                 else
                     handleError(KEY_DISMISS_2FA, context.getString(R.string.reject_auth))
             }
         }
-        dialog.show((context as AppCompatActivity).supportFragmentManager, DIALOG_TAG)
+        dialog.show(activity.supportFragmentManager, DIALOG_TAG)
     }
 
     companion object {
         const val TAG = "PayzeLib"
         const val DIALOG_TAG = "webViewDialog"
 
+        var savedScreenOrientation: Int? = null
+
         const val KEY_NO_CONNECTION = 1001
         const val KEY_REQUEST_FAIL = 1002
         const val KEY_DISMISS_2FA = 1003
         const val KEY_STATUS_NOT_SUCCESS = 1004
+        const val KEY_UNKNOWN = 1005
     }
 }
