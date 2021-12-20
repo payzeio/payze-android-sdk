@@ -47,6 +47,8 @@ fun getCardData(): CardInfo {
 
 In case of some error, "onError" callback will be triggered with corresponding code and text.
 
+Follow the instructions for transaction processing on our website https://payze.io/docs.
+
 ### Error codes:
 Some error codes from library.
 * 1001: No internet connection
@@ -54,3 +56,7 @@ Some error codes from library.
 * 1003: Canceled card verification
 * 1004: Transaction status is not Successful
 * 1005: Unknown error
+
+
+#### Example
+A simple Android app using this sdk can be found here https://github.com/payzeio/payze-android-sdk-example
