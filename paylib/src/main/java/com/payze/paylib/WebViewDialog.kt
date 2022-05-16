@@ -93,7 +93,7 @@ class WebViewDialog : DialogFragment() {
 
     companion object {
         const val KEY_URL = "URL_KEY"
-        const val KEY_WORD = "payze.io"
+        const val KEY_WORD = "payze"
 
         var listener: DialogCallBack? = null
 
