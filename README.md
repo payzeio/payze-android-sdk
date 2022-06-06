@@ -47,7 +47,7 @@ fun getCardData(): CardInfo {
 
 In case of some error, "onError" callback will be triggered with corresponding code and text.
 
-Follow the instructions for transaction processing on our website https://payze.io/docs.
+Follow the instructions for transaction processing on our website https://docs.payze.io/reference/getting-started.
 
 ### Error codes:
 Some error codes from library.
