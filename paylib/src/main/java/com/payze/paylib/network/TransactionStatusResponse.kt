@@ -3,6 +3,7 @@ package com.payze.paylib.network
 import com.squareup.moshi.Json
 
 class TransactionStatusResponse(
+    @Json(name = "status")
     val status: TransactionStatus
 )
 

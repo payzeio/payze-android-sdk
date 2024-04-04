@@ -10,7 +10,7 @@ import com.payze.paylib.model.CardInfo
 class MainActivity : AppCompatActivity() {
 
     // should have one
-    private val transactionID = "72f55da8-8e2b-4ec0-8701-88ec1d80157a"
+    private val transactionID = "CFCBDAFB7F2D41EBA2E34E3EA"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +24,6 @@ class MainActivity : AppCompatActivity() {
                 payze.pay(
                     readCardData(),
                     transactionID,
-                    "",
                     onSuccess = ::onSuccess,
                     onError = ::onError
                 )

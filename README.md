@@ -16,7 +16,7 @@ Add a dependency to our library in the app build.gradle file:
 ```groovy
 dependencies {
     ...
-    implementation 'com.github.payzeio:payze-android-sdk:0.1.1'
+    implementation 'com.github.payzeio:payze-android-sdk:0.1.2'
 }
 ```
 

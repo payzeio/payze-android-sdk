@@ -5,12 +5,13 @@ import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import com.payze.paylib.model.CardInfo
 import com.payze.paylib.network.ApiService
+import com.payze.paylib.network.PaymentRequest
 import com.payze.paylib.network.TransactionStatus
 import com.payze.paylib.network.sendRequest
 
 class Payze(private val context: Context) {
 
-    private var transactionID: String? = null
+    private var transactionId: String? = null
     private var onSuccess: (() -> Unit)? = null
     private var onError: ((code: Int?, error: String?) -> Unit)? = null
     private val activity get() = context as AppCompatActivity
@@ -22,7 +23,6 @@ class Payze(private val context: Context) {
     fun pay(
         cardInfo: CardInfo,
         transactionID: String,
-        billingAddress: String = "",
         onSuccess: () -> Unit,
         onError: (code: Int?, error: String?) -> Unit
     ) {
@@ -32,7 +32,6 @@ class Payze(private val context: Context) {
             cardInfo.expirationDate,
             cardInfo.securityNumber,
             transactionID,
-            billingAddress,
             onSuccess,
             onError
         )
@@ -44,29 +43,41 @@ class Payze(private val context: Context) {
         expirationDate: String,
         securityNumber: String,
         transactionID: String,
-        billingAddress: String = "",
         onSuccess: () -> Unit,
         onError: (code: Int?, error: String?) -> Unit
     ) {
-        this.transactionID = transactionID
+        pay(
+            PaymentRequest(
+                number,
+                cardHolder,
+                expirationDate,
+                securityNumber,
+                transactionID
+            ),
+            onSuccess,
+            onError
+        )
+    }
+
+    fun pay(
+        paymentRequest: PaymentRequest,
+        onSuccess: () -> Unit,
+        onError: (code: Int?, error: String?) -> Unit
+    ) {
+        this.transactionId = paymentRequest.transactionId
         this.onSuccess = onSuccess
         this.onError = onError
 
-        ApiService.get().sendPaymentData(
-            number,
-            cardHolder,
-            expirationDate,
-            securityNumber,
-            transactionID,
-            billingAddress
-        ).sendRequest(
+        ApiService.get().sendPaymentData(paymentRequest).sendRequest(
             successWithData = { response ->
                 response?.let {
                     when {
                         it.success == true && it.threeDSIsPresent == true && !it.url.isNullOrBlank() ->
                             openWebView(it.url)
+
                         it.success == true && it.threeDSIsPresent != true ->
-                            checkTransactionStatus(transactionID)
+                            checkTransactionStatus(transactionId)
+
                         else ->
                             handleError(KEY_UNKNOWN, context.getString(R.string.unknown_error))
                     }
@@ -126,7 +137,7 @@ class Payze(private val context: Context) {
                     activity.requestedOrientation = it
                 }
                 if (success)
-                    checkTransactionStatus(transactionID)
+                    checkTransactionStatus(transactionId)
                 else
                     handleError(KEY_DISMISS_2FA, context.getString(R.string.reject_auth))
             }

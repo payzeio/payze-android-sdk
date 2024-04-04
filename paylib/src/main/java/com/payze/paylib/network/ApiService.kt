@@ -7,7 +7,10 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Query
 import java.util.concurrent.TimeUnit
 
 interface ApiService {
@@ -53,15 +56,9 @@ interface ApiService {
     }
 
 
-    @FormUrlEncoded
-    @POST("mobile/cardInfo")
+    @POST("v2/payment/pay")
     fun sendPaymentData(
-        @Field("number") number: String,
-        @Field("cardHolder") cardHolder: String,
-        @Field("expirationDate") expirationDate: String,
-        @Field("securityNumber") securityNumber: String,
-        @Field("transactionId") transactionId: String,
-        @Field("billingAddress") billingAddress: String,
+        @Body paymentBody: PaymentRequest
     ): Call<PaymentResponse>
 
     @GET("mobile/transactionStatus")
