@@ -1,7 +1,9 @@
 package com.payze.paylib.network
 
+import androidx.annotation.Keep
 import com.squareup.moshi.Json
 
+@Keep
 data class PaymentRequest(
     @Json(name = "number")
     val number: String,
